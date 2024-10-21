@@ -1,11 +1,10 @@
 substitutions:
-  <<: !include ../secrets.yaml
   device_name: 'relay'
   device_board: 'smr4'
   comment: "Реле Sonoff MINIR4"
   timezone: "Europe/Moscow"
   project_author: "ivanych"
-  project_version: '0.0.1'
+  project_version: '0.1.0'
 
 packages:
   boards: github://ivanych/esphome-boards/smr4.sonoff_minir4.yaml@0.1.0
@@ -19,5 +18,5 @@ packages:
       - time.yaml
     ref: 0.0.1
 
-  devices: github://ivanych/esphome-units/relay.yaml@0.1.0
-  #device: !include esphome-units/relay.yaml
+  units: github://ivanych/esphome-units/relay.yaml@0.1.0
+  #units: !include esphome-units/relay.yaml
