@@ -8,7 +8,7 @@ substitutions:
   comment: "Реле Sonoff MINIR4"
   timezone: "Europe/Moscow"
   project_author: "ivanych"
-  project_version: '0.1.0'
+  project_version: '0.3.0'
 
 esphome:
   name: ${device_name}-${device_board}-${device_number}
