@@ -8,7 +8,7 @@ substitutions:
   comment: "Реле Sonoff MINIR4"
   timezone: "Europe/Moscow"
   project_author: "ivanych"
-  project_version: '0.1.0'
+  project_version: '0.3.0'
 
 esphome:
   name: ${device_name}-${device_board}-${device_number}
@@ -19,8 +19,8 @@ esphome:
     version: ${project_version}
 
 packages:
-  boards: github://ivanych/esphome-boards/smr4.sonoff_minir4.yaml@0.1.0
-  #boards: !include esphome-boards/smr4.sonoff_minir4.yaml
+  boards: github://ivanych/esphome-boards/smr4.yaml@1.0.0
+  #boards: !include ../esphome-boards/smr4.yaml
 
   common:
     url: https://github.com/ivanych/esphome-common
@@ -30,5 +30,5 @@ packages:
       - time.yaml
     ref: 0.0.1
 
-  units: github://ivanych/esphome-units/relay.yaml@0.1.0
-  #units: !include esphome-units/relay.yaml
+  units: github://ivanych/esphome-units/relay.yaml@1.0.0
+  #units: !include ../esphome-units/relay.yaml
