@@ -1,0 +1,21 @@
+substitutions:
+  friendly_name: 'Relay-2M-SDR3'
+  comment: "Реле с двумя каналами, кнопкой и внешними выключателями на SDR3 (Sonoff DUALR3)"
+  timezone: "Europe/Moscow"
+  project_author: "ivanych"
+  project_version: '1.0.0'
+
+packages:
+  common:
+    url: https://github.com/ivanych/esphome-common
+    files:
+      - common.yaml
+      - sensors.yaml
+      - time.yaml
+    ref: 0.3.0
+
+  units: github://ivanych/esphome-units/relay_2m.yaml@3.0.0
+  #units: !include ../esphome-units/relay_2m.yaml
+
+  boards: github://ivanych/esphome-boards/sdr3.yaml@1.1.0
+  #boards: !include ../esphome-boards/sdr3.yaml

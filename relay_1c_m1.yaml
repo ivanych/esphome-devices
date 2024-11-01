@@ -1,0 +1,28 @@
+substitutions:
+  friendly_name: 'Relay-1C-M1'
+  comment: "Реле с одним каналом на M1 (Super Mini)"
+  timezone: "Europe/Moscow"
+  project_author: "ivanych"
+  project_version: '1.0.0'
+
+packages:
+  common:
+    url: https://github.com/ivanych/esphome-common
+    files:
+      - common.yaml
+      - sensors.yaml
+      - time.yaml
+    ref: 0.3.0
+
+  units: github://ivanych/esphome-units/relay_1c.yaml@3.0.0
+  #units: !include ../esphome-units/relay_1c.yaml
+
+  boards: github://ivanych/esphome-boards/m1.yaml@1.1.0
+  #boards: !include ../esphome-boards/m1.yaml
+
+# Принудительное создание канала реле на m1
+output:
+  - platform: gpio
+    id: output_relay
+    pin:
+      number: 10
