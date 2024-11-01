@@ -3,7 +3,7 @@ substitutions:
   comment: "Реле с одним каналом, кнопкой и внешним выключателем на SMR4 (Sonoff MINIR4)"
   timezone: "Europe/Moscow"
   project_author: "ivanych"
-  project_version: '0.3.0-3'
+  project_version: '1.0.0'
 
 packages:
   common:

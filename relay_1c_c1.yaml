@@ -3,7 +3,7 @@ substitutions:
   comment: "Реле с одним каналом на C1 (Luatos CORE-ESP32)"
   timezone: "Europe/Moscow"
   project_author: "ivanych"
-  project_version: '0.3.0-2'
+  project_version: '1.0.0'
 
 packages:
   common:

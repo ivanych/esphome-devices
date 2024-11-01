@@ -3,7 +3,7 @@ substitutions:
   comment: "Реле с двумя каналами, кнопкой и внешними выключателями на SDR3 (Sonoff DUALR3)"
   timezone: "Europe/Moscow"
   project_author: "ivanych"
-  project_version: '0.2.0-2'
+  project_version: '1.0.0'
 
 packages:
   common:

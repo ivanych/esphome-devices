@@ -3,7 +3,7 @@ substitutions:
   comment: "Реле с одним каналом на M1 (Super Mini)"
   timezone: "Europe/Moscow"
   project_author: "ivanych"
-  project_version: '0.3.0-1'
+  project_version: '1.0.0'
 
 packages:
   common:
