@@ -1,0 +1,21 @@
+substitutions:
+  friendly_name: 'LightDetector-IL1'
+  comment: "Детектор света на IL1 (Ivanych Light 1)"
+  timezone: "Europe/Moscow"
+  project_author: "ivanych"
+  project_version: '1.0.0'
+
+packages:
+  common:
+    url: https://github.com/ivanych/esphome-common
+    files:
+      - common.yaml
+      - sensors.yaml
+      - time.yaml
+    ref: 0.3.0
+
+  units: github://ivanych/esphome-units/lightdetector.yaml@3.1.0
+  #units: !include ../esphome-units/lightdetector.yaml
+
+  boards: github://ivanych/esphome-boards/il1.yaml@1.3.0
+  #boards: !include ../esphome-boards/il1.yaml
