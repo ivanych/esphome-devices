@@ -3,7 +3,7 @@ substitutions:
   comment: "Детектор света на IL1 (Ivanych Light 1)"
   timezone: "Europe/Moscow"
   project_author: "ivanych"
-  project_version: '1.0.0'
+  project_version: '1.1.0'
 
 packages:
   common:
