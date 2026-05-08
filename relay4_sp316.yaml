@@ -1,9 +1,6 @@
 substitutions:
   friendly_name: 'Relay4-SP316'
   comment: "Реле с одним каналом, кнопкой и светодиодом на SP316 (Sonoff POWR316)"
-  timezone: "Europe/Moscow"
-  project_author: "ivanych"
-  project_version: '2.0.0'
 
 packages:
   common:
@@ -12,7 +9,7 @@ packages:
       - common.yaml
       - sensors.yaml
       - time.yaml
-    ref: 0.3.0
+    ref: 1.0.0
 
   units: github://ivanych/esphome-units/relay4.yaml@4.1.0
   #units: !include ../esphome-units/relay4.yaml
