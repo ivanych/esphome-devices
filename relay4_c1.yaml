@@ -1,39 +1,34 @@
 substitutions:
-  friendly_name: 'Relay4-C1'
-  comment: "Реле с одним каналом, кнопкой и светодиодом на C1 (Luatos CORE-ESP32)"
-  relay_pin: 6 # Номер пина, на котором работает реле
+  comment: "Relay4 (реле с одним каналом, светодиодом и кнопкой)
+            на C1 (Luatos CORE-ESP32)"
 
 packages:
   common:
     url: https://github.com/ivanych/esphome-common
     files:
-      - common.yaml
+      #- common.yaml
       - sensors.yaml
       - time.yaml
-    ref: 1.0.0
+    ref: 1.1.0
+  com: !include ../esphome-common/common.yaml
+  is_boot: !include ../esphome-common/is_boot.yaml
 
-  units: github://ivanych/esphome-units/relay4.yaml@4.1.0
+  units: github://ivanych/esphome-units/relay4.yaml@6.0.0
   #units: !include ../esphome-units/relay4.yaml
 
-  boards: github://ivanych/esphome-boards/c1.yaml@1.5.0
+  boards: github://ivanych/esphome-boards/c1.yaml@3.0.1
   #boards: !include ../esphome-boards/c1.yaml
 
-# Для устройства нужна плата с интерфейсом Relay4 (реле, кнопка, светодиод),
-# но плата C1 имеет интерфейс B1 (кнопка, светодиод)
-# Нужно расширить B1 до Relay4, добавив реле.
-output:
-  # Реле
-  - platform: gpio
-    id: output_relay
-    pin:
-      number: ${relay_pin}
-      inverted: true
+  # Relay4                                C1
+  # реле1       (output_relay_1)
+  # светодиод1  (output_led_1)            *
+  # кнопка1     (binary_sensor_button_1)  *
 
-text_sensor:
-  # Номер пина, на котором работает реле
-  - platform: template
-    name: "Relay Pin"
-    id: text_sensor_relay_pin
-    icon: mdi:connection
-    entity_category: diagnostic
-    lambda: 'return {"${relay_pin}"};'
+  # реле1
+  output_relay_1: !include
+    file: ../esphome-boards/int/output_relay.yaml
+    vars:
+      pin:
+        number: 6
+        inverted: true
+      exposed: true
