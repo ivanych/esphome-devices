@@ -1,8 +1,6 @@
 substitutions:
-  friendly_name: 'Relay5-C1'
-  comment: "Реле с одним каналом, кнопкой, светодиодом и внешним выключателем на C1 (Luatos CORE-ESP32)"
-  relay_pin: 6            # Номер пина, на котором работает реле
-  external_switch_pin: 8  # Номер пина, на котором работает внешний выключатель
+  comment: "Relay5 (реле с одним каналом, светодиодом, кнопкой и выключателем)
+            на C1 (Luatos CORE-ESP32)"
 
 packages:
   common:
@@ -11,50 +9,34 @@ packages:
       - common.yaml
       - sensors.yaml
       - time.yaml
-    ref: 1.0.0
+      - is_boot.yaml
+    ref: 1.2.1
 
-  units: github://ivanych/esphome-units/relay5.yaml@5.0.0
+  units: github://ivanych/esphome-units/relay5.yaml@6.0.0
   #units: !include ../esphome-units/relay5.yaml
 
-  boards: github://ivanych/esphome-boards/c1.yaml@1.5.0
+  boards: github://ivanych/esphome-boards/c1.yaml@3.0.1
   #boards: !include ../esphome-boards/c1.yaml
 
-# Для устройства нужна плата с интерфейсом Relay5 (реле, кнопка, светодиод, внешний выключатель),
-# но плата C1 имеет интерфейс B1 (кнопка, светодиод)
-# Нужно расширить B1 до Relay5, добавив реле и внешний выключатель.
-output:
-  # Реле
-  - platform: gpio
-    id: output_relay
-    pin:
-      number: ${relay_pin}
-      inverted: true
+  # Relay5                                C1
+  # реле1         (output_relay_1)
+  # светодиод1    (output_led_1)          *
+  # кнопка1       (binary_sensor_button)  *
+  # выключатель1  (binary_sensor_switch)
 
-binary_sensor:
-  # Внешний выключатель
-  - platform: gpio
-    name: "External switch"
-    id: binary_sensor_external_switch
-    pin:
-      number: ${external_switch_pin}
-      inverted: true
-    filters:
-      - delayed_on: ${debounce_delay}
+  # реле1
+  output_relay_1: !include
+    file: ../esphome-boards/int/output_relay.yaml
+    vars:
+      pin:
+        number: 6
+        inverted: true
+      exposed: true
 
-# Для удобства работы нужно вывести в интерфейсе номера пинов,
-# используемых для добавленных реле и внешнего выключателя.
-text_sensor:
-  # Номер пина, на котором работает реле
-  - platform: template
-    name: "[ext] Relay Pin"
-    id: text_sensor_relay_pin
-    icon: mdi:connection
-    entity_category: diagnostic
-    lambda: 'return {"${relay_pin}"};'
-  # Номер пина, на котором работает внешний выключатель
-  - platform: template
-    name: "[ext] External switch Pin"
-    id: text_sensor_external_switch_pin
-    icon: mdi:connection
-    entity_category: diagnostic
-    lambda: 'return {"${external_switch_pin}"};'
+  # выключатель1
+  binary_sensor_switch: !include
+    file: ../esphome-boards/int/binary_sensor_switch.yaml
+    vars:
+      pin:
+        number: 10
+      exposed: true

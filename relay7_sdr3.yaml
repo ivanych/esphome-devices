@@ -1,0 +1,19 @@
+substitutions:
+  comment: "Relay7 (реле с двумя каналами, одной кнопкой и двумя выключателями)
+            на SDR3 (Sonoff DUALR3)"
+
+packages:
+  common:
+    url: https://github.com/ivanych/esphome-common
+    files:
+      - common.yaml
+      - sensors.yaml
+      - time.yaml
+      - is_boot.yaml
+    ref: 1.2.1
+
+  units: github://ivanych/esphome-units/relay7.yaml@6.0.0
+  #units: !include ../esphome-units/relay7.yaml
+
+  boards: github://ivanych/esphome-boards/sdr3.yaml@3.0.1
+  #boards: !include ../esphome-boards/sdr3.yaml
