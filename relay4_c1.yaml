@@ -6,12 +6,11 @@ packages:
   common:
     url: https://github.com/ivanych/esphome-common
     files:
-      #- common.yaml
+      - common.yaml
       - sensors.yaml
       - time.yaml
-    ref: 1.1.0
-  com: !include ../esphome-common/common.yaml
-  is_boot: !include ../esphome-common/is_boot.yaml
+      - is_boot.yaml
+    ref: 1.2.1
 
   units: github://ivanych/esphome-units/relay4.yaml@6.0.0
   #units: !include ../esphome-units/relay4.yaml
