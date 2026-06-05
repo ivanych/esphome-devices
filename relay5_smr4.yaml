@@ -1,6 +1,6 @@
 substitutions:
-  friendly_name: 'Relay5-SMR4'
-  comment: "Реле с одним каналом, кнопкой, светодиодом и внешним выключателем на SMR4 (Sonoff MINIR4)"
+  comment: "Relay5 (реле с одним каналом, светодиодом, кнопкой и выключателем)
+            на SMR4 (Sonoff MINIR4)"
 
 packages:
   common:
@@ -9,18 +9,14 @@ packages:
       - common.yaml
       - sensors.yaml
       - time.yaml
-    ref: 1.0.0
+      - is_boot.yaml
+      # Плата SMR4 не имеет отдельного статусного светодиода, придётся
+      # добавить его, совместив со светодиодом на плате.
+      - status_led.yaml
+    ref: 1.2.1
 
-  units: github://ivanych/esphome-units/relay5.yaml@5.0.0
+  units: github://ivanych/esphome-units/relay5.yaml@6.0.0
   #units: !include ../esphome-units/relay5.yaml
 
-  boards: github://ivanych/esphome-boards/smr4.yaml@1.6.1
+  boards: github://ivanych/esphome-boards/smr4.yaml@3.0.1
   #boards: !include ../esphome-boards/smr4.yaml
-
-# Плата SMR4 не имеет отдельного статусного светодиода, придётся
-# добавить его, совместив со светодиодом на плате.
-light:
-  - platform: status_led
-    id: light_status_led
-    internal: true
-    output: output_onboard_led
