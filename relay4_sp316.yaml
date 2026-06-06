@@ -5,15 +5,24 @@ substitutions:
 packages:
   common:
     url: https://github.com/ivanych/esphome-common
+    ref: 1.2.1
     files:
       - common.yaml
       - sensors.yaml
       - time.yaml
       - is_boot.yaml
-    ref: 1.2.1
 
   units: github://ivanych/esphome-units/relay4.yaml@6.0.0
   #units: !include ../esphome-units/relay4.yaml
 
-  boards: github://ivanych/esphome-boards/sp316.yaml@3.0.1
-  #boards: !include ../esphome-boards/sp316.yaml
+  # Relay4                                  SP316
+  # реле1         (output_relay_1)          *
+  # светодиод1    (output_led_1)            *
+  # кнопка1       (binary_sensor_button)    *
+
+  boards:
+    url: https://github.com/ivanych/esphome-boards
+    ref: 3.0.1
+    files:
+      # Плата SP316
+      - sp316.yaml

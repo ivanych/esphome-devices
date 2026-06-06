@@ -5,6 +5,7 @@ substitutions:
 packages:
   common:
     url: https://github.com/ivanych/esphome-common
+    ref: 1.2.1
     files:
       - common.yaml
       - sensors.yaml
@@ -13,10 +14,19 @@ packages:
       # Плата SMR4 не имеет отдельного статусного светодиода, придётся
       # добавить его, совместив со светодиодом на плате.
       - status_led.yaml
-    ref: 1.2.1
 
   units: github://ivanych/esphome-units/relay5.yaml@6.0.0
   #units: !include ../esphome-units/relay5.yaml
 
-  boards: github://ivanych/esphome-boards/smr4.yaml@3.0.1
-  #boards: !include ../esphome-boards/smr4.yaml
+  # Relay5                                  SMR4
+  # реле1         (output_relay_1)          *
+  # светодиод1    (output_led_1)            *
+  # кнопка1       (binary_sensor_button)    *
+  # выключатель1  (binary_sensor_switch)    *
+
+  boards:
+    url: https://github.com/ivanych/esphome-boards
+    ref: 3.0.1
+    files:
+      # Плата SMR4
+      - smr4.yaml
