@@ -5,61 +5,61 @@ substitutions:
 packages:
   common:
     url: https://github.com/ivanych/esphome-common
+    ref: 1.2.1
     files:
       - common.yaml
       - sensors.yaml
       - time.yaml
       - is_boot.yaml
-    ref: 1.2.1
 
   units: github://ivanych/esphome-units/relay7.yaml@6.0.0
   #units: !include ../esphome-units/relay7.yaml
 
-  boards: github://ivanych/esphome-boards/c1.yaml@3.0.1
-  #boards: !include ../esphome-boards/c1.yaml
-
   # Relay7                                  C1
   # реле1         (output_relay_1)
   # реле2         (output_relay_2)
-  # кнопка        (binary_sensor_button)    *
+  # кнопка1       (binary_sensor_button)    *
   # выключатель1  (binary_sensor_switch_1)
   # выключатель2  (binary_sensor_switch_2)
 
-  # реле1
-  output_relay_1: !include
-    file: ../esphome-boards/int/output_relay.yaml
-    vars:
-      pin:
-        number: 6
-        inverted: true
-      exposed: true
+  boards:
+    url: https://github.com/ivanych/esphome-boards
+    ref: 3.0.1
+    files:
+      # Плата C1
+      - c1.yaml
 
-  # реле2
-  output_relay_2: !include
-    file: ../esphome-boards/int/output_relay.yaml
-    vars:
-      number: 2
-      pin:
-        number: 0
-        inverted: true
-      exposed: true
+      # реле1
+      - path: int/output_relay.yaml
+        vars:
+          pin:
+            number: 6
+            inverted: true
+          exposed: true
 
-  # кнопка
-  # уже есть на C1
+      # реле2
+      - path: int/output_relay.yaml
+        vars:
+          number: 2
+          pin:
+            number: 0
+            inverted: true
+          exposed: true
 
-  # выключатель1
-  binary_sensor_switch_1: !include
-    file: ../esphome-boards/int/binary_sensor_switch.yaml
-    vars:
-      pin:
-        number: 10
-      exposed: true
+      # кнопка
+      # уже есть на C1
 
-  # выключатель2
-  binary_sensor_switch_2: !include
-    file: ../esphome-boards/int/binary_sensor_switch.yaml
-    vars:
-      number: 2
-      pin:
-        number: 7
-      exposed: true
+      # выключатель1
+      - path: int/binary_sensor_switch.yaml
+        vars:
+          pin:
+            number: 10
+          exposed: true
+
+      # выключатель2
+      - path: int/binary_sensor_switch.yaml
+        vars:
+          number: 2
+          pin:
+            number: 7
+          exposed: true

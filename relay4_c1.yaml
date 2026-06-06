@@ -5,29 +5,32 @@ substitutions:
 packages:
   common:
     url: https://github.com/ivanych/esphome-common
+    ref: 1.2.1
     files:
       - common.yaml
       - sensors.yaml
       - time.yaml
       - is_boot.yaml
-    ref: 1.2.1
 
   units: github://ivanych/esphome-units/relay4.yaml@6.0.0
   #units: !include ../esphome-units/relay4.yaml
 
-  boards: github://ivanych/esphome-boards/c1.yaml@3.0.1
-  #boards: !include ../esphome-boards/c1.yaml
+  # Relay4                                  C1
+  # реле1         (output_relay_1)
+  # светодиод1    (output_led_1)            *
+  # кнопка1       (binary_sensor_button)    *
 
-  # Relay4                                C1
-  # реле1       (output_relay_1)
-  # светодиод1  (output_led_1)            *
-  # кнопка1     (binary_sensor_button_1)  *
+  boards:
+    url: https://github.com/ivanych/esphome-boards
+    ref: 3.0.1
+    files:
+      # Плата C1
+      - c1.yaml
 
-  # реле1
-  output_relay_1: !include
-    file: ../esphome-boards/int/output_relay.yaml
-    vars:
-      pin:
-        number: 6
-        inverted: true
-      exposed: true
+      # реле1
+      - path: int/output_relay.yaml
+        vars:
+          pin:
+            number: 6
+            inverted: true
+          exposed: true
