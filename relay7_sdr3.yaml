@@ -24,7 +24,8 @@ packages:
 
   boards:
     url: https://github.com/ivanych/esphome-boards
-    ref: 3.0.1
+    ref: 3.3.1
     files:
       # Плата SDR3
       - sdr3.yaml
+    #!include ../esphome-boards/sdr3.yaml
