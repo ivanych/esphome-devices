@@ -1,0 +1,61 @@
+substitutions:
+  comment: "LightDetector1 (датчик света со светодиодом, отладочной кнопкой
+            и люксметром)
+            на S1V1 (ESP32 30-Pin DevKit)"
+
+packages:
+  common:
+    url: https://github.com/ivanych/esphome-common
+    ref: 1.2.1
+    files:
+      - common.yaml
+      - sensors.yaml
+      - time.yaml
+      - status_led.yaml # На S1V1 нет отдельного статусного светодиода
+
+  units: github://ivanych/esphome-units/lightdetector1.yaml@6.1.0
+  #units: !include ../esphome-units/lightdetector1.yaml
+
+  # LightDetector1                                        S1V1
+  # датчик света          (binary_sensor_lightdetector)   -
+  # светодиод             (output_led)                    +
+  # кнопка                (binary_sensor_button)          +
+  # люксметр              (sensor_luxometer)              -
+
+  boards:
+    url: https://github.com/ivanych/esphome-boards
+    ref: 3.3.1
+    files:
+      # Плата S1V1
+      - s1v1.yaml
+
+      # Датчик света
+      - path: int/binary_sensor_lightdetector.yaml
+        vars:
+          pin:
+            number: 25
+            inverted: true
+            mode:
+              input: true
+              pullup: true
+          exposed: true
+
+      # Люксметр
+      - path: int/sensor_luxometer.yaml
+        vars:
+          pin:
+            number: 32
+            mode:
+              input: true
+              pullup: true
+          exposed: true
+
+  #sensor_luxometer: !include
+  #  file: ../esphome-boards/int/sensor_luxometer.yaml
+  #  vars:
+  #    pin:
+  #      number: 32
+  #      mode:
+  #        input: true
+  #        pullup: true
+  #    exposed: true
