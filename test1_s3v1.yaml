@@ -1,0 +1,28 @@
+substitutions:
+  comment: "Test1 (светодиод с кнопкой)
+            на S3V1 (ESP32-S3 N16R8 CAM)"
+
+packages:
+  common:
+    url: https://github.com/ivanych/esphome-common
+    ref: 1.2.1
+    files:
+      - common.yaml
+      - sensors.yaml
+      - time.yaml
+      - status_led.yaml # На S3V1 нет отдельного статусного светодиода
+
+  units: github://ivanych/esphome-units/test1.yaml@6.2.0
+  #units: !include ../esphome-units/test1.yaml
+
+  # Test1                                                 S3V1
+  # светодиод             (output_led)                    +
+  # кнопка                (binary_sensor_button)          +
+
+  boards:
+    url: https://github.com/ivanych/esphome-boards
+    ref: 3.4.0
+    files:
+      # Плата S3V1
+      - s3v1.yaml
+  #boards: !include ../esphome-boards/s3v1.yaml
