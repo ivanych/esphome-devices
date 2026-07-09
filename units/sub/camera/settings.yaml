@@ -1,0 +1,184 @@
+# Настройки камеры
+#
+# Управляемые объекты:
+#   - нет
+# Требует управляемые объекты:
+#   - Камера                          (esp32_camera)
+
+substitutions:
+  number: 1
+
+select:
+  # Настройка resolution
+  # ! Функция set_frame_size не срабатывает
+  # https://github.com/esphome/issues/issues/5499
+  - platform: template
+    name: "Resolution"
+    id: select_resolution
+    icon: mdi:aspect-ratio
+    entity_category: config
+    optimistic: true
+    options:
+      - 320x240
+      - 640x480
+      - 800x600
+      - 1024x768
+    initial_option: 800x600
+    restore_value: true
+    set_action:
+      - lambda: |
+          ESP_LOGD("template.select", "▶ select_resolution.set_action(%s)", x.c_str());
+          
+          using FrameSize_t = esphome::esp32_camera::ESP32CameraFrameSize;
+          int resolution = 4;
+          
+          id(esp32_camera_${number}).set_frame_size((FrameSize_t) resolution);
+          id(esp32_camera_${number}).update_camera_parameters();
+          //id(esp32_camera_${number}).dump_config();
+    on_value:
+      - lambda: |
+          ESP_LOGD("template.select", "▶ select_resolution.on_value([%d] %s)", i, x.c_str());
+
+  # Настройка wb_mode
+  - platform: template
+    name: "White Balance"
+    id: select_wb_mode
+    icon: mdi:white-balance-sunny
+    entity_category: config
+    optimistic: true
+    options:
+      - auto
+      - sunny
+      - cloudy
+      - office
+      - home
+    initial_option: auto
+    restore_value: true
+    set_action:
+      - lambda: |
+          ESP_LOGD("template.select", "▶ select_wb_mode.set_action(%s)", x.c_str());
+    on_value:
+      - lambda: |
+          ESP_LOGD("template.select", "▶ select_wb_mode.on_value(%s [%i])", x.c_str(), i);
+
+          using namespace esphome::esp32_camera;
+
+          if (x == "auto") {
+            id(esp32_camera_${number}).set_wb_mode(ESP32_WB_MODE_AUTO);
+            ESP_LOGD("template.select", "  esp32_camera_${number}.set_wb_mode(ESP32_WB_MODE_AUTO)");
+          }
+          else if (x == "sunny") {
+            id(esp32_camera_${number}).set_wb_mode(ESP32_WB_MODE_SUNNY);
+            ESP_LOGD("template.select", "  esp32_camera_${number}.set_wb_mode(ESP32_WB_MODE_SUNNY)");
+          }
+          else if (x == "cloudy") {
+            id(esp32_camera_${number}).set_wb_mode(ESP32_WB_MODE_CLOUDY);
+            ESP_LOGD("template.select", "  esp32_camera_${number}.set_wb_mode(ESP32_WB_MODE_CLOUDY)");
+          }
+          else if (x == "office") {
+            id(esp32_camera_${number}).set_wb_mode(ESP32_WB_MODE_OFFICE);
+            ESP_LOGD("template.select", "  esp32_camera_${number}.set_wb_mode(ESP32_WB_MODE_OFFICE)");
+          }
+          else if (x == "home") {
+            id(esp32_camera_${number}).set_wb_mode(ESP32_WB_MODE_HOME);
+            ESP_LOGD("template.select", "  esp32_camera_${number}.set_wb_mode(ESP32_WB_MODE_HOME)");
+          }
+          
+          id(esp32_camera_${number}).update_camera_parameters();
+          ESP_LOGD("template.select", "  esp32_camera_${number}.update_camera_parameters()");
+
+number:
+  # Настройка jpeg_quality
+  # ! Функция set_jpeg_quality не срабатывает
+  # https://github.com/esphome/issues/issues/5499
+  - platform: template
+    name: "Quality"
+    id: jpeg_quality
+    icon: mdi:quality-high
+    entity_category: config
+    optimistic: true
+    mode: slider
+    min_value: 6
+    max_value: 63
+    step: 1
+    initial_value: 10
+    restore_value: true
+    set_action:
+      - lambda: |-
+          ESP_LOGD("template.number", "▶ jpeg_quality.set_action(%f)", x);
+          
+          uint8_t q = x;
+          ESP_LOGD("number", "Set %f -> %f (%i)", id(jpeg_quality).state, x, q);
+          
+          id(esp32_camera_${number}).set_jpeg_quality(q);
+          ESP_LOGD("number", "set_jpeg_quality(%i))", q);
+          
+          id(esp32_camera_${number}).update_camera_parameters();
+          ESP_LOGD("number", "update_camera_parameters())");
+    on_value:
+      - lambda: |
+          ESP_LOGD("template.number", "▶ jpeg_quality.on_value(%f)", x);
+
+  # Настройка max_framerate
+  - platform: template
+    name: "Framerate"
+    id: max_framerate
+    unit_of_measurement: "FPS"
+    icon: mdi:update
+    entity_category: config
+    mode: slider
+    min_value: 1
+    max_value: 60
+    step: 1
+    initial_value: 10
+    optimistic: true
+    restore_value: true
+    set_action:
+      - lambda: |
+          ESP_LOGD("template.number", "▶ max_framerate.set_action(%f)", x);
+    on_value:
+      - lambda: |
+          ESP_LOGD("template.number", "▶ max_framerate.on_value(%f)", x);
+
+          // Интервал в миллисекундах
+          uint32_t q = 1000/x;
+
+          id(esp32_camera_${number}).set_max_update_interval(q);
+          ESP_LOGD("template.number", "  esp32_camera_${number}.set_max_update_interval(%i ms)", q);
+
+          id(esp32_camera_${number}).update_camera_parameters();
+          ESP_LOGD("template.number", "  esp32_camera_${number}.update_camera_parameters()");
+
+switch:
+  # Настройка vertical_flip
+  - platform: template
+    name: "Vertical Flip"
+    id: switch_vertical_flip
+    icon: mdi:flip-vertical
+    entity_category: config
+    optimistic: true
+    restore_mode: RESTORE_DEFAULT_ON
+    turn_on_action:
+      - lambda: |
+          ESP_LOGD("template.switch", "▶ switch_vertical_flip.turn_on_action");
+    turn_off_action:
+      - lambda: |
+          ESP_LOGD("template.switch", "▶ switch_vertical_flip.turn_off_action");
+    on_turn_on:
+      - lambda: |
+          ESP_LOGD("template.switch", "▶ switch_vertical_flip.on_turn_on");
+          
+          id(esp32_camera_${number}).set_vertical_flip(true);
+          ESP_LOGD("template.switch", "  esp32_camera_${number}.set_vertical_flip(true))");
+          
+          id(esp32_camera_${number}).update_camera_parameters();
+          ESP_LOGD("template.switch", "  esp32_camera_${number}.update_camera_parameters()");
+    on_turn_off:
+      - lambda: |
+          ESP_LOGD("template.switch", "▶ switch_vertical_flip.on_turn_off");
+
+          id(esp32_camera_${number}).set_vertical_flip(false);
+          ESP_LOGD("template.switch", "  esp32_camera_${number}.set_vertical_flip(false))");
+          
+          id(esp32_camera_${number}).update_camera_parameters();
+          ESP_LOGD("template.switch", "  esp32_camera_${number}.update_camera_parameters()");
