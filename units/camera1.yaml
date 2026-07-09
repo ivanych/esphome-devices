@@ -1,0 +1,18 @@
+# Camera1
+# Камера со светодиодом
+
+substitutions:
+  friendly_unit_name: "Camera1"
+
+packages:
+  # Камера со светодиодом
+  camera: !include
+    file: sub/camera_w_led.yaml
+
+  # Настройки камеры
+  settings: !include
+    file: sub/camera/settings.yaml
+
+  # Веб-сервер камеры
+  web_server: !include
+    file: sub/camera/web_server.yaml
