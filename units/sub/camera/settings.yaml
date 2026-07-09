@@ -32,9 +32,9 @@ select:
           using FrameSize_t = esphome::esp32_camera::ESP32CameraFrameSize;
           int resolution = 4;
           
-          id(esp32_camera_1).set_frame_size((FrameSize_t) resolution);
-          id(esp32_camera_1).update_camera_parameters();
-          //id(esp32_camera_1).dump_config();
+          id(esp32_camera_${number}).set_frame_size((FrameSize_t) resolution);
+          id(esp32_camera_${number}).update_camera_parameters();
+          //id(esp32_camera_${number}).dump_config();
     on_value:
       - lambda: |
           ESP_LOGD("template.select", "▶ select_resolution.on_value([%d] %s)", i, x.c_str());
@@ -64,28 +64,28 @@ select:
           using namespace esphome::esp32_camera;
 
           if (x == "auto") {
-            id(esp32_camera_1).set_wb_mode(ESP32_WB_MODE_AUTO);
-            ESP_LOGD("template.select", "  esp32_camera_1.set_wb_mode(ESP32_WB_MODE_AUTO)");
+            id(esp32_camera_${number}).set_wb_mode(ESP32_WB_MODE_AUTO);
+            ESP_LOGD("template.select", "  esp32_camera_${number}.set_wb_mode(ESP32_WB_MODE_AUTO)");
           }
           else if (x == "sunny") {
-            id(esp32_camera_1).set_wb_mode(ESP32_WB_MODE_SUNNY);
-            ESP_LOGD("template.select", "  esp32_camera_1.set_wb_mode(ESP32_WB_MODE_SUNNY)");
+            id(esp32_camera_${number}).set_wb_mode(ESP32_WB_MODE_SUNNY);
+            ESP_LOGD("template.select", "  esp32_camera_${number}.set_wb_mode(ESP32_WB_MODE_SUNNY)");
           }
           else if (x == "cloudy") {
-            id(esp32_camera_1).set_wb_mode(ESP32_WB_MODE_CLOUDY);
-            ESP_LOGD("template.select", "  esp32_camera_1.set_wb_mode(ESP32_WB_MODE_CLOUDY)");
+            id(esp32_camera_${number}).set_wb_mode(ESP32_WB_MODE_CLOUDY);
+            ESP_LOGD("template.select", "  esp32_camera_${number}.set_wb_mode(ESP32_WB_MODE_CLOUDY)");
           }
           else if (x == "office") {
-            id(esp32_camera_1).set_wb_mode(ESP32_WB_MODE_OFFICE);
-            ESP_LOGD("template.select", "  esp32_camera_1.set_wb_mode(ESP32_WB_MODE_OFFICE)");
+            id(esp32_camera_${number}).set_wb_mode(ESP32_WB_MODE_OFFICE);
+            ESP_LOGD("template.select", "  esp32_camera_${number}.set_wb_mode(ESP32_WB_MODE_OFFICE)");
           }
           else if (x == "home") {
-            id(esp32_camera_1).set_wb_mode(ESP32_WB_MODE_HOME);
-            ESP_LOGD("template.select", "  esp32_camera_1.set_wb_mode(ESP32_WB_MODE_HOME)");
+            id(esp32_camera_${number}).set_wb_mode(ESP32_WB_MODE_HOME);
+            ESP_LOGD("template.select", "  esp32_camera_${number}.set_wb_mode(ESP32_WB_MODE_HOME)");
           }
           
-          id(esp32_camera_1).update_camera_parameters();
-          ESP_LOGD("template.select", "  esp32_camera_1.update_camera_parameters()");
+          id(esp32_camera_${number}).update_camera_parameters();
+          ESP_LOGD("template.select", "  esp32_camera_${number}.update_camera_parameters()");
 
 number:
   # Настройка jpeg_quality
@@ -110,10 +110,10 @@ number:
           uint8_t q = x;
           ESP_LOGD("number", "Set %f -> %f (%i)", id(jpeg_quality).state, x, q);
           
-          id(esp32_camera_1).set_jpeg_quality(q);
+          id(esp32_camera_${number}).set_jpeg_quality(q);
           ESP_LOGD("number", "set_jpeg_quality(%i))", q);
           
-          id(esp32_camera_1).update_camera_parameters();
+          id(esp32_camera_${number}).update_camera_parameters();
           ESP_LOGD("number", "update_camera_parameters())");
     on_value:
       - lambda: |
@@ -143,11 +143,11 @@ number:
           // Интервал в миллисекундах
           uint32_t q = 1000/x;
 
-          id(esp32_camera_1).set_max_update_interval(q);
-          ESP_LOGD("template.number", "  esp32_camera_1.set_max_update_interval(%i ms)", q);
+          id(esp32_camera_${number}).set_max_update_interval(q);
+          ESP_LOGD("template.number", "  esp32_camera_${number}.set_max_update_interval(%i ms)", q);
 
-          id(esp32_camera_1).update_camera_parameters();
-          ESP_LOGD("template.number", "  esp32_camera_1.update_camera_parameters()");
+          id(esp32_camera_${number}).update_camera_parameters();
+          ESP_LOGD("template.number", "  esp32_camera_${number}.update_camera_parameters()");
 
 switch:
   # Настройка vertical_flip
@@ -168,17 +168,17 @@ switch:
       - lambda: |
           ESP_LOGD("template.switch", "▶ switch_vertical_flip.on_turn_on");
           
-          id(esp32_camera_1).set_vertical_flip(true);
-          ESP_LOGD("template.switch", "  esp32_camera_1.set_vertical_flip(true))");
+          id(esp32_camera_${number}).set_vertical_flip(true);
+          ESP_LOGD("template.switch", "  esp32_camera_${number}.set_vertical_flip(true))");
           
-          id(esp32_camera_1).update_camera_parameters();
-          ESP_LOGD("template.switch", "  esp32_camera_1.update_camera_parameters()");
+          id(esp32_camera_${number}).update_camera_parameters();
+          ESP_LOGD("template.switch", "  esp32_camera_${number}.update_camera_parameters()");
     on_turn_off:
       - lambda: |
           ESP_LOGD("template.switch", "▶ switch_vertical_flip.on_turn_off");
 
-          id(esp32_camera_1).set_vertical_flip(false);
-          ESP_LOGD("template.switch", "  esp32_camera_1.set_vertical_flip(false))");
+          id(esp32_camera_${number}).set_vertical_flip(false);
+          ESP_LOGD("template.switch", "  esp32_camera_${number}.set_vertical_flip(false))");
           
-          id(esp32_camera_1).update_camera_parameters();
-          ESP_LOGD("template.switch", "  esp32_camera_1.update_camera_parameters()");
+          id(esp32_camera_${number}).update_camera_parameters();
+          ESP_LOGD("template.switch", "  esp32_camera_${number}.update_camera_parameters()");
