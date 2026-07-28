@@ -1,13 +1,27 @@
 # Camera1
-# Камера со светодиодом
+# Камера с индикатором и подсветкой
 
 substitutions:
   friendly_unit_name: "Camera1"
 
 packages:
-  # Камера со светодиодом
+  # Камера
   camera: !include
-    file: sub/camera_w_led.yaml
+    file: sub/camera.yaml
+    vars:
+      name: "Camera"
+
+  # Индикатор камеры
+  indicator: !include
+    file: sub/camera/indicator.yaml
+
+  # Подсветка
+  flash: !include
+    file: sub/light_flash.yaml
+    vars:
+      name: "Flash"
+
+  # ---
 
   # Настройки камеры
   settings: !include
