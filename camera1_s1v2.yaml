@@ -1,0 +1,31 @@
+substitutions:
+  comment: "Camera1 (камера с индикатором и подсветкой)
+            на S1V2 (ESP32-CAM OV2640)"
+
+packages:
+  common:
+    url: https://github.com/ivanych/esphome-common
+    ref: 1.2.1
+    files:
+      - common.yaml
+      - sensors.yaml
+      - time.yaml
+
+  units: !include units/camera1.yaml
+
+  # Camera1                                                 S1V2
+  # Камера                  (esp32_camera)                  +
+  # Индикатор камеры        (light_indicator)               +
+  # Подсветка               (light_flash)                   +
+
+  boards:
+    url: https://github.com/ivanych/esphome-boards
+    ref: 4.0.0
+    files:
+      # Плата S1V2
+      - s1v2.yaml
+    #!include ../esphome-boards/s1v2.yaml
+
+# На S1V2 есть кнопка, но для камеры она не нужна - удаляем
+binary_sensor:
+  - id: !remove binary_sensor_button_1
