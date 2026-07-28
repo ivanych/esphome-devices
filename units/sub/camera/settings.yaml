@@ -144,7 +144,7 @@ number:
           uint32_t q = 1000/x;
 
           id(esp32_camera_${number}).set_max_update_interval(q);
-          ESP_LOGD("template.number", "  esp32_camera_${number}.set_max_update_interval(%i ms)", q);
+          ESP_LOGD("template.number", "  esp32_camera_${number}.set_max_update_interval(%lu ms)", q);
 
           id(esp32_camera_${number}).update_camera_parameters();
           ESP_LOGD("template.number", "  esp32_camera_${number}.update_camera_parameters()");
