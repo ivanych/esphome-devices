@@ -1,5 +1,5 @@
 substitutions:
-  comment: "Camera1 (камера со светодиодом)
+  comment: "Camera1 (камера с индикатором и подсветкой)
             на S3V1 (ESP32-S3 N16R8 CAM OV5640)"
 
 packages:
@@ -10,23 +10,22 @@ packages:
       - common.yaml
       - sensors.yaml
       - time.yaml
-      - status_led.yaml # На S3V1 нет отдельного статусного светодиода
 
   units: !include units/camera1.yaml
 
-  # Camera1                                               S3V1
-  # камера                (camera)                        +
-  # светодиод             (output_led)                    +
-  # кнопка                (output_led)                    +!
+  # Camera1                                                 S3V1
+  # Камера                  (esp32_camera)                  +
+  # Индикатор камеры        (light_indicator)               +
+  # Подсветка               (light_flash)                   +
 
   boards:
     url: https://github.com/ivanych/esphome-boards
-    ref: 3.5.1
+    ref: 4.0.0
     files:
       # Плата S3V1
       - s3v1.yaml
-  #boards: !include ../esphome-boards/s3v1.yaml
+    #!include ../esphome-boards/s3v1.yaml
 
-# На S3V1 есть кнопка, но для камеры она не нужна
+# На S3V1 есть кнопка, но для камеры она не нужна - удаляем
 binary_sensor:
   - id: !remove binary_sensor_button_1
