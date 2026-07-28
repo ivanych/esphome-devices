@@ -1,0 +1,34 @@
+# Камера
+#
+# Управляемые объекты:
+#   - нет
+# Требует управляемые объекты:
+#   - Камера                            (esp32_camera)
+
+substitutions:
+  number: 1
+  name: "Camera ${number}"
+  resolution: 800x600
+  jpeg_quality: 10
+
+esp32_camera:
+  name: ${name}
+
+  # Image Settings:
+  resolution: ${resolution}
+  jpeg_quality: ${jpeg_quality}
+
+# Это временный костыль, чтобы показать настройки resolution и jpeg_quality,
+# которые не работают через интерфейс из-за бага в esphome
+# (https://github.com/esphome/issues/issues/5499)
+text_sensor:
+  - platform: template
+    name: "Camera ${number} (resolution)"
+    icon: mdi:quality-high
+    entity_category: diagnostic
+    lambda: 'return {"${resolution}"};'
+  - platform: template
+    name: "Camera ${number} (jpeg_quality)"
+    icon: mdi:aspect-ratio
+    entity_category: diagnostic
+    lambda: 'return {"${jpeg_quality}"};'
