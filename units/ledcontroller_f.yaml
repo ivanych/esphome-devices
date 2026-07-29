@@ -1,0 +1,55 @@
+# Контроллер светодиодных лент с полным набором выходов
+
+substitutions:
+  unit_name: "ledcontroller-f"
+
+
+binary_sensor:
+
+  # Кнопка на плате
+  - id: !extend binary_sensor_onboard_button
+    on_press:
+      - light.toggle: redblue
+
+light:
+  - platform: binary
+    name: "OBL"
+    id: redblue
+    output: output_onboard_led
+
+  - platform: binary
+    name: "R"
+    output: output_r
+  - platform: binary
+    name: "G"
+    output: output_g
+  - platform: binary
+    name: "B"
+    output: output_b
+  - platform: binary
+    name: "C"
+    output: output_c
+  - platform: binary
+    name: "W"
+    output: output_w
+
+
+  - platform: neopixelbus
+    type: GRB
+    variant: WS2812X
+    pin: 19
+    num_leds: 30
+    name: "NeoPixel Light"
+
+    effects:
+      - pulse:
+      - random:
+      - strobe:
+      - flicker:
+      - addressable_flicker:
+      - addressable_fireworks:
+      - addressable_random_twinkle:
+      - addressable_twinkle:
+      - addressable_scan:
+      - addressable_color_wipe:
+      - addressable_rainbow:
