@@ -1,0 +1,59 @@
+substitutions:
+  comment: "Flashlight1 (Фонарик с кнопкой, [-индикатором] и [-статусным индикатором])
+            на C3V4 (ESP32-C3 Zero)"
+
+packages:
+  common:
+    url: https://github.com/ivanych/esphome-common
+    ref: 2.0.0
+    files:
+      - common.yaml
+      - sensors.yaml
+      - time.yaml
+
+  # Фонарик
+  flashlight1: !include
+    file: units/flashlight1.yaml
+    vars:
+      # Фонарик
+      flashlight:
+        type: addr # addr обязывает кнопку использовать target.id: addr_strip
+        target:
+          id: addr_strip
+
+      # Кнопка
+      button:
+        source:
+          id: key
+        # Вынужденное указание addr_strip, а не flashlight
+        target:
+          id: addr_strip
+
+      # Индикатор
+      #indicator:
+      #  target:
+      #    id: mono_led
+      #    number: 2
+
+      # ! отключено, потому что на плате есть только адресная лента,
+      # ! а на ней нельзя сделать статусный индикатор
+      # Статусный индикатор
+      #status:
+      #  target:
+      #    id: mono_led
+
+  boards:
+    url: https://github.com/ivanych/esphome-boards
+    ref: 5.0.0
+    files:
+      # Плата C3V4
+      - path: c3v4.yaml
+        vars:
+          use_addr_strip: true
+          use_key: true
+
+    #!include
+    #file: ../esphome-boards/c3v4.yaml
+    #vars:
+    #  use_addr_strip: true
+    #  use_key: true
