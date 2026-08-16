@@ -1,0 +1,18 @@
+# Статусный индикатор
+#
+# Управляемые объекты:
+#   - нет
+# Требует управляемые объекты:
+#   - target: output
+
+substitutions:
+  number: 1
+  target:
+    id: null
+    #number: 1
+
+light:
+  - platform: status_led
+    id: status_${number}
+    internal: true
+    output: ${target.id}_${target.number}

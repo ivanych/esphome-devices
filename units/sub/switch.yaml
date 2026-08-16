@@ -1,0 +1,69 @@
+# Выключатель
+#
+# Управляемые объекты:
+#   - Выключатель (binary_sensor.switch)
+# Требует управляемые объекты:
+#   - source: binary_sensor
+#   - target: [toggle, turn_on, turn_off]
+
+substitutions:
+  number: 1
+  name: "Switch ${number}"
+  source:
+    id: null
+    #number: 1
+  target:
+    id: null
+    #number: 1
+
+binary_sensor:
+  - platform: copy
+    id: switch_${number}
+    source_id: ${source.id}_${source.number}
+    name: ${name}
+
+    on_press:
+      - logger.log:
+          format: "▶ switch_${number}.on_press"
+          tag: "binary_sensor"
+      - if:
+          condition:
+            lambda: 'return id(switch_mode_${number}).current_option() == "Momentary";'
+          then:
+            lambda: 'id(${target.id}_${target.number}).turn_on().perform();'
+      - if:
+          condition:
+            lambda: 'return id(switch_mode_${number}).current_option() == "Locking";'
+          then:
+            lambda: 'id(${target.id}_${target.number}).toggle().perform();'
+      - if:
+          condition:
+            lambda: 'return id(switch_mode_${number}).current_option() == "Detach";'
+          then:
+            - logger.log:
+                format: "  current_option == 'Detach' --> ❌ skip on_press!"
+                tag: "binary_sensor"
+    on_release:
+      - logger.log:
+          format: "▶ switch_${number}.on_release"
+          tag: "binary_sensor"
+      - if:
+          condition:
+            lambda: 'return id(switch_mode_${number}).current_option() == "Momentary";'
+          then:
+            lambda: 'id(${target.id}_${target.number}).turn_off().perform();'
+
+select:
+  # Режим работы выключателя
+  - platform: template
+    name: "${name} Mode"
+    id: switch_mode_${number}
+    icon: mdi:repeat
+    options:
+      - "Momentary"
+      - "Locking"
+      - "Detach"
+    initial_option: "Momentary"
+    optimistic: true
+    restore_value: true
+    entity_category: config

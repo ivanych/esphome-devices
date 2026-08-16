@@ -1,0 +1,79 @@
+# Flashlight1
+# Фонарик с кнопкой, [индикатором] и [статусным индикатором]
+
+substitutions:
+  friendly_unit_name: "Flashlight1"
+
+  flashlight:
+    type: mono # (mono|bin|addr)
+    target:
+      id: null
+      number: 1
+  button:
+    source:
+      id: null
+      number: 1
+    target:
+      id: flashlight
+      number: 1
+  indicator:
+    source:
+      id: flashlight
+      number: 1
+    target:
+      id: null
+      number: 1
+  status:
+    target:
+      id: null
+      number: 1
+
+  # Индикатор
+  exposed_indicator: !include
+    file: sub/indicator.yaml
+    vars:
+      source:
+        id: ${ indicator.get('source', {}).get('id', 'flashlight') }
+        number: ${ indicator.get('source', {}).get('number', '1') }
+      target:
+        id: ${indicator.target.id}
+        number: ${indicator.target.number | default('1')}
+
+  # Статусный индикатор
+  exposed_status: !include
+    file: sub/status.yaml
+    vars:
+      target:
+        id: ${status.target.id}
+        number: ${status.target.number | default('1')}
+
+
+packages:
+  # Фонарик
+  flashlight: !include
+    file: sub/flashlight.yaml
+    vars:
+      name: "Flashlight"
+      type: ${ flashlight.get('type', 'mono') }
+      target:
+        id: ${flashlight.target.id}
+        number: ${ flashlight.target.get('number', '1') }
+
+  # Кнопка (выключатель)
+  button: !include
+    file: sub/switch.yaml
+    vars:
+      name: "Button"
+      source:
+        id: ${button.source.id}
+        number: ${ button.source.get('number', '1') }
+      target:
+        id: ${ button.get('target', {}).get('id', 'flashlight') }
+        number: ${ button.get('target', {}).get('number', '1') }
+
+  # Индикатор
+  indicator: ${ exposed_indicator if indicator.target.id else {} }
+
+  # Статусный индикатор
+  status: ${ exposed_status if status.target.id else {} }
+
