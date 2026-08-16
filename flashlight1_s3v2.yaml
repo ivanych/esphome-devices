@@ -1,0 +1,61 @@
+substitutions:
+  comment: "Flashlight1 (Фонарик с кнопкой, индикатором и статусным индикатором)
+            на S3V2 (ESP32-S3 N16R8 CAM OV5640)"
+
+packages:
+  common:
+    url: https://github.com/ivanych/esphome-common
+    ref: 2.0.0
+    files:
+      - common.yaml
+      - sensors.yaml
+      - time.yaml
+
+  # Фонарик
+  flashlight1: !include
+    file: units/flashlight1.yaml
+    vars:
+      # Фонарик
+      flashlight:
+        type: addr
+        target:
+          id: addr_strip
+
+      # Кнопка
+      button:
+        source:
+          id: key
+        # Вынужденное указание addr_strip из-за фонарика с type: addr
+        target:
+          id: addr_strip
+
+      # Индикатор
+      indicator:
+        # Вынужденное указание addr_strip из-за фонарика с type: addr
+        source:
+          id: addr_strip
+        target:
+          id: mono_led
+
+      # Статусный индикатор
+      status:
+        target:
+          id: mono_led
+
+  boards:
+    url: https://github.com/ivanych/esphome-boards
+    ref: 5.0.0
+    files:
+      # Плата S3V2
+      - path: s3v2.yaml
+        vars:
+          use_mono_led: true
+          use_addr_strip: true
+          use_key: true
+
+    #!include
+    #file: ../esphome-boards/s3v2.yaml
+    #vars:
+    #  use_mono_led: true
+    #  use_addr_strip: true
+    #  use_key: true
