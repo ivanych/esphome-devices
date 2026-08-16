@@ -1,0 +1,52 @@
+substitutions:
+  comment: "Flashlight1 (Фонарик с кнопкой, [-индикатором] и статусным индикатором)
+            на S1V1 (ESP32 30-Pin DevKit)"
+
+packages:
+  common:
+    url: https://github.com/ivanych/esphome-common
+    ref: 2.0.0
+    files:
+      - common.yaml
+      - sensors.yaml
+      - time.yaml
+
+  # Фонарик
+  flashlight1: !include
+    file: units/flashlight1.yaml
+    vars:
+      # Фонарик
+      flashlight:
+        target:
+          id: mono_led
+
+      # Кнопка
+      button:
+        source:
+          id: key
+
+      # Индикатор
+      #indicator:
+      #  target:
+      #    id: mono_led
+      #    number: 2
+
+      # Статусный индикатор
+      status:
+        target:
+          id: mono_led
+
+  boards:
+    url: https://github.com/ivanych/esphome-boards
+    ref: 5.0.0
+    files:
+      - path: s1v1.yaml
+        vars:
+          use_key: true
+          use_mono_led: true
+
+    #!include
+    #file: ../esphome-boards/s1v1.yaml
+    #vars:
+    #  use_key: true
+    #  use_mono_led: true

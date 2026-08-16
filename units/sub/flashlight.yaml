@@ -1,0 +1,42 @@
+# Фонарик
+#
+# Управляемые объекты:
+#   - Фонарик (light.flashlight)
+# Требует управляемые объекты:
+#   - (output|light)
+#
+# | type | target | управляемый объект  |
+# +------+--------+---------------------+
+# | mono | output | light.flashlight    |
+# | bin  | output | light.flashlight    |
+# | addr | light  | light.<target>.<id> |
+
+substitutions:
+  number: 1
+  name: "Flashlight ${number}"
+  type: mono # (mono|bin|addr)
+  target:
+    id: null
+    #number: 1
+
+  type_mono:
+    light:
+      - platform: monochromatic
+        id: flashlight_${number}
+        output: ${target.id}_${target.number}
+        name: ${name}
+
+  type_bin:
+    light:
+      - platform: binary
+        id: flashlight_${number}
+        output: ${target.id}_${target.number}
+        name: ${name}
+
+  type_addr:
+    light:
+      - id: !extend ${target.id}_${target.number}
+        name: ${name}
+
+packages:
+  mono: ${ type_${type} }

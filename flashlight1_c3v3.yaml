@@ -1,0 +1,64 @@
+substitutions:
+  comment: "Flashlight1 (Фонарик с кнопкой, [-индикатором] и [-статусным индикатором])
+            на C3V3 (ESP32-C3 Super Mini Plus)"
+
+packages:
+  common:
+    url: https://github.com/ivanych/esphome-common
+    ref: 2.0.0
+    files:
+      - common.yaml
+      - sensors.yaml
+      - time.yaml
+
+  # Фонарик
+  flashlight1: !include
+    file: units/flashlight1.yaml
+    vars:
+      # Фонарик
+      flashlight:
+        # На плате C3V3 обычный светодиод сидит на одном пине c адресным,
+        # и если подключать обычный как monochromatic (т.е PWM),
+        # то от этого включается адресный (и адресный потом не выключается,
+        # даже после выключения обычного).
+        # Так что если использовать обычный светодиод,
+        # то нужно использовать type: bin
+        type: addr # addr обязывает кнопку использовать target.id: addr_strip
+        target:
+          id: addr_strip
+
+      # Кнопка
+      button:
+        source:
+          id: key
+        # Вынужденное указание addr_strip, а не flashlight
+        target:
+          id: addr_strip
+
+      # Индикатор
+      #indicator:
+      #  target:
+      #    id: mono_led
+      #    number: 2
+
+      # ! отключено, потому что на плате есть только адресная лента,
+      # ! а на ней нельзя сделать статусный индикатор
+      # Статусный индикатор
+      #status:
+      #  target:
+      #    id: mono_led
+
+  boards:
+    url: https://github.com/ivanych/esphome-boards
+    ref: 5.0.0
+    files:
+      - path: c3v3.yaml
+        vars:
+          use_addr_strip: true
+          use_key: true
+
+    #!include
+    #file: ../esphome-boards/c3v3.yaml
+    #vars:
+    #  use_addr_strip: true
+    #  use_key: true
