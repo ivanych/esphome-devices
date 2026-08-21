@@ -1,0 +1,60 @@
+# Electropulse1
+# Дельта-счётчик электроэнергии на основе подсчёта импульсов с индикатором и [статусным индикатором]
+
+substitutions:
+  friendly_unit_name: "Electropulse1"
+
+  electropulse:
+    source:
+      id: null
+      number: 1
+
+  indicator:
+    target:
+      id: null
+      number: 1
+
+  status:
+    target:
+      id: null
+      number: 1
+
+  # Электропульс
+  exposed_electropulse: !include
+    file: sub/electropulse.yaml
+    vars:
+      source:
+        id: ${electropulse.source.id}
+        number: ${electropulse.source.number | default('1')}
+      target:
+        id: ${indicator.target.id}
+        number: ${indicator.target.number | default('1')}
+
+  # Индикатор для сенсора
+  exposed_indicator: !include
+    file: sub/indicator.sensor.yaml
+    vars:
+      source:
+        id: ${ indicator.get('source', {}).get('id', 'pulsometer') }
+        number: ${ indicator.get('source', {}).get('number', '1') }
+      target:
+        id: ${indicator.target.id}
+        number: ${indicator.target.number | default('1')}
+
+  # Статусный индикатор
+  exposed_status: !include
+    file: sub/status.yaml
+    vars:
+      target:
+        id: ${status.target.id}
+        number: ${status.target.number | default('1')}
+
+packages:
+  # Счётчик импульсов
+  electropulse: ${ exposed_electropulse if electropulse.source.id else {} }
+
+  # Индикатор для сенсора
+  indicator: ${ exposed_indicator if indicator.target.id else {} }
+
+  # Статусный индикатор
+  status: ${ exposed_status if status.target.id else {} }

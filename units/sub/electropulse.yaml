@@ -1,0 +1,108 @@
+# Электропульс
+#
+# Управляемые объекты:
+#   - Пульсометр (sensor.pulsometer)
+# Требует управляемые объекты:
+#   - sensor
+
+substitutions:
+  number: 1
+  name: "Power ${number}"
+  source:
+    id: null
+    #number: 1
+  pulse_timeout: '10s'
+  pulse_rate: 6400
+
+text_sensor:
+  # Таймаут ожидания следующего импульса (для диагностики в HA)
+  - platform: template
+    name: "Pulse Timeout"
+    id: txtsensor_pulse_timeout
+    icon: mdi:timer-sand
+    update_interval: 1d
+    lambda: |-
+      return {"$pulse_timeout"};
+    entity_category: diagnostic
+
+sensor:
+  # Передаточное число счётчика (для диагностики в HA)
+  - platform: template
+    name: "Pulse Rate"
+    unit_of_measurement: "pulses/kWh"
+    icon: mdi:scale
+    accuracy_decimals: 0
+    update_interval: 1d
+    lambda: |-
+      return ${pulse_rate};
+    entity_category: diagnostic
+
+  # Потребляемая мощность (пересчёт показаний пульсометра в мощность)
+  - id: !extend ${source.id}_${source.number}
+    name: "Power"
+    unit_of_measurement: "W"
+    accuracy_decimals: 0
+    device_class: power
+
+    # Таймаут ожидания следующего импульса
+    # Если за это время не будет импульса —
+    # считаем, что потребление энергии прекратилось, мощность станет 0
+    timeout: ${pulse_timeout}
+
+    filters:
+      # Тротлим передачу показаний в HA до раза в секунду
+      # (а не при каждом импульсе)
+      - throttle: 1s
+
+      # Пересчёт показаний пульсометра в мощность (W) через ${pulse_rate} —
+      # передаточное число счётчика (указано на счётчике)
+      - lambda: |-
+          float pph = x * 60;              // Cенсор считает импульсы в минутах, нужно привести к часам
+          float kw  = pph / ${pulse_rate}; // Киловатты
+          float w   = kw * 1000;           // Ватты
+          return w;
+
+    # Счётчик импульсов (за последнюю минуту)
+    total:
+      name: "Pulses (last minute)"
+      filters:
+        # Тротлим передачу показаний в HA до раза в секунду
+        # (а не при каждом импульсе)
+        - throttle: 1s
+
+  # Энергия (за последнюю минуту) (она же - дельта для суммирования энергии в utility_meter в HA)
+  - platform: template
+    name: "Energy (last minute)"
+
+    # 60s - значение по умолчанию, но тут указано явно,
+    # это чтобы точно понимать, какая дельта в показаниях (минута)
+    update_interval: 60s
+    unit_of_measurement: "kWh"
+    icon: mdi:lightning-bolt
+    accuracy_decimals: 3
+    device_class: energy
+    state_class: total
+    lambda: |-
+      return id(${source.id}_${source.number}_total).state;
+    on_raw_value:
+      then:
+        # Сбрасываем счётчик импульсов, началась новая минута остчёта
+        - pulse_meter.set_total_pulses:
+            id: pulsometer_1
+            value: 0
+    filters:
+      # Пересчёт импульсов в энергию (kWh) через ${pulse_rate} —
+      # передаточное число счётчика (указано на счётчике)
+      - lambda: |-
+          return x / ${pulse_rate};
+
+    # Это не косметика, это очень важно!
+    # Если новое значение датчика не будет отличаться от предыдущего,
+    # то HA будет считать, что показания датчика не изменились
+    # и не запишет новое значение.
+    # А новое значение легко может быть таким же, как предыдущее,
+    # если потребление ровное, без скачков.
+    # Принудительная отправка показаний нужна для того,
+    # чтобы HA гарантированно записал новое значение,
+    # даже если оно не отличается от предыдущего.
+    force_update: true

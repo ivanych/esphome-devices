@@ -1,0 +1,46 @@
+substitutions:
+  comment: "Electropulse1 (Дельта-счётчик электроэнергии на основе подсчёта импульсов)
+            на IL1 (ESP32-C3 Ivanych Light 1)"
+
+packages:
+  common:
+    url: https://github.com/ivanych/esphome-common
+    ref: 2.0.0
+    files:
+      - common.yaml
+      - sensors.yaml
+      - time.yaml
+
+  # Электросчётчик
+  electropulse1: !include
+    file: units/electropulse1.yaml
+    vars:
+      # Электропульс
+      electropulse:
+        source:
+          id: pulsometer
+
+      # Индикатор
+      indicator:
+        target:
+          id: mono_led
+
+      # Статусный индикатор
+      status:
+        target:
+          id: mono_led
+
+  boards:
+    url: https://github.com/ivanych/esphome-boards
+    ref: 6.0.0
+    files:
+      - path: il1.yaml
+        vars:
+          use_mono_led: true
+          use_pulsometer: true
+
+    #!include
+    #file: ../esphome-boards/il1.yaml
+    #vars:
+    #  use_mono_led: true
+    #  use_pulsometer: true
