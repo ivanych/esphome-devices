@@ -1,5 +1,7 @@
 substitutions:
-  comment: "Electropulse1 (Дельта-счётчик электроэнергии на основе подсчёта импульсов)
+  comment: "Electropulse1
+            (Дельта-счётчик электроэнергии на основе подсчёта импульсов
+            с индикатором и статусным индикатором)
             на IL1 (ESP32-C3 Ivanych Light 1)"
 
 packages:
@@ -11,7 +13,7 @@ packages:
       - sensors.yaml
       - time.yaml
 
-  # Электросчётчик
+  # Дельта-счётчик
   electropulse1: !include
     file: units/electropulse1.yaml
     vars:
