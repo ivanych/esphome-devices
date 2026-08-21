@@ -1,0 +1,36 @@
+# Индикатор датчика
+#
+# Управляемые объекты:
+#   - Индикатор (lite.indicator)
+# Требует управляемые объекты:
+#   - source: sensor
+#   - target: [turn_on, turn_off]
+
+substitutions:
+  number: 1
+  source:
+    id: null
+    #number: 1
+  target:
+    id: null
+    #number: 1
+
+sensor:
+  - id: !extend ${source.id}_${source.number}
+
+    # on_value — публикация показания после прохождения всех фильтров
+    on_value:
+      then:
+        - logger.log:
+            format: "▶ ${source.id}_${source.number}.on_value"
+            tag: "sensor"
+
+        - output.turn_on:
+            id: ${target.id}_${target.number}
+        - delay: 0.1s
+        - output.turn_off:
+            id: ${target.id}_${target.number}
+
+        - logger.log:
+            format: "  ${target.id}_${target.number}.turn_on...turn_off"
+            tag: "sensor"
